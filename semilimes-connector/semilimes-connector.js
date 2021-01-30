@@ -335,6 +335,7 @@ module.exports = function(RED) {
         this.on("input", function(msg, nodeSend, nodeDone) {
             var payload;	
 			this.token = n.token;
+			this.destination = parseInt(n.destination);
 			this.receiver = n.receiver;	
             if (this.serverConfig.wholemsg) {
                 var sess;
@@ -409,7 +410,9 @@ module.exports = function(RED) {
         this.on("input", function(msg, nodeSend, nodeDone) {
             var payload;	
 			this.token = n.token;
+			this.destination = parseInt(n.destination);
 			this.receiver = n.receiver;	
+			this.destination = parseInt(n.destination);
             if (this.serverConfig.wholemsg) {
                 var sess;
                 if (msg._session) { sess = JSON.stringify(msg._session); }
@@ -425,11 +428,17 @@ module.exports = function(RED) {
                     payload = msg.payload;
                 }
             }
-			payload = ' {"AuthToken": "' + node.token + '",\
-				"Type": "chat",\
-				"TypeID": "590E4E6C-2C5D-47E8-8F38-311D5A299EE7",\
-				"ReceiverID": "' + node.receiver + '",\
-				"Body": "' + msg.payload + '" } '; 
+			payload = ' {"AuthToken": "' + node.token + '", "Type": "chat",';
+			payload += ' "TypeID": "590E4E6C-2C5D-47E8-8F38-311D5A299EE7",';				
+			if(this.destination == 0)
+			{
+				payload += 	' "ConversationID": "' + node.receiver + '",';
+			}
+			else if(this.destination == 1)
+			{
+				payload += 	' "ReceiverID": "' + node.receiver + '",';
+			}
+			payload += ' "Body": "' + msg.payload + '" } '; 
 			
             if (payload) {
                 if (msg._session && msg._session.type == "websocket") {
@@ -489,6 +498,7 @@ module.exports = function(RED) {
         this.on("input", function(msg, nodeSend, nodeDone) {
             var payload;	
 			this.token = n.token;
+			this.destination = parseInt(n.destination);
 			this.receiver = n.receiver;		
 			this.choice1 = n.choice1;		
 			this.choice2 = n.choice2;		
@@ -522,8 +532,17 @@ module.exports = function(RED) {
 			{
 				payload += ' "Body": "' + msg.payload + '",';
 			}
-			payload += ' "ReceiverID": "' + node.receiver + '",\
-				"Layout": "flexible", "Options": [';
+							
+			if(this.destination == 0)
+			{
+				payload += 	' "ConversationID": "' + node.receiver + '",';
+			}
+			else if(this.destination == 1)
+			{
+				payload += 	' "ReceiverID": "' + node.receiver + '",';
+			}
+			
+			payload += 	' "Layout": "flexible", "Options": [';
 			
 			if(msg.payload.hasOwnProperty("Options")) 	
 			{
@@ -564,7 +583,7 @@ module.exports = function(RED) {
     }
     RED.nodes.registerType("Select",WebSocketSelectNode);
 
-    function WebSocketLocationNode(n) {
+    function WebSocketSendLocationNode(n) {
         RED.nodes.createNode(this,n);
         var node = this;
         this.server = (n.client)?n.client:n.server;
@@ -603,6 +622,7 @@ module.exports = function(RED) {
         this.on("input", function(msg, nodeSend, nodeDone) {
             var payload;	
 			this.token = n.token;
+			this.destination = parseInt(n.destination);
 			this.receiver = n.receiver;	
 			this.latitude = n.latitude;		
 			this.longitude = n.longitude;				
@@ -625,12 +645,12 @@ module.exports = function(RED) {
 			if(msg.payload.hasOwnProperty("Location")) 
 			{
 				payload += '"Location": {"latitude":'+ msg.payload.Location.latitude +',"longitude":' + msg.payload.Location.longitude +'},';
-				payload += '"ReceiverID": "' + node.receiver + '", "Body": "' + msg.payload.Body + '"}'; 
+			payload += '"ConversationID": "' + node.receiver + '", "Body": "' + msg.payload.Body + '"}'; 
 			}
 			else
 			{
 				payload += '"Location": {"latitude":'+ node.latitude +',"longitude":' + node.longitude + '},';
-				payload += '"ReceiverID": "' + node.receiver + '", "Body": "' + msg.payload + '"}'; 
+			payload += '"ConversationID": "' + node.receiver + '", "Body": "' + msg.payload + '"}'; 
 			}
 			
             if (payload) {
@@ -650,7 +670,7 @@ module.exports = function(RED) {
             node.status({});
         });
     }
-    RED.nodes.registerType("Send Location",WebSocketLocationNode);
+    RED.nodes.registerType("Send Location",WebSocketSendLocationNode);
 
     function WebSocketHTMLNode(n) {
         RED.nodes.createNode(this,n);
@@ -691,6 +711,7 @@ module.exports = function(RED) {
         this.on("input", function(msg, nodeSend, nodeDone) {
             var payload;	
 			this.token = n.token;
+			this.destination = parseInt(n.destination);
 			this.receiver = n.receiver;					
             if (this.serverConfig.wholemsg) {
                 var sess;
@@ -707,8 +728,16 @@ module.exports = function(RED) {
                     payload = msg.payload;
                 }
             }
-			payload = '{"AuthToken": "' + node.token + '", "Type": "chat","TypeID": "38199F47-504C-4C73-97E5-8076C8CFAA21", \
-			"ReceiverID": "' + node.receiver + '", "Body": "' + msg.payload.Body + '"}'; 
+			payload = '{"AuthToken": "' + node.token + '", "Type": "chat","TypeID": "38199F47-504C-4C73-97E5-8076C8CFAA21",';
+			if(this.destination == 0)
+			{
+				payload += 	' "ConversationID": "' + node.receiver + '",';
+			}
+			else if(this.destination == 1)
+			{
+				payload += 	' "ReceiverID": "' + node.receiver + '",';
+			}
+			payload += 	'"Body": "' + msg.payload.Body + '"}'; 
 			
             if (payload) {
                 if (msg._session && msg._session.type == "websocket") {
@@ -768,6 +797,7 @@ module.exports = function(RED) {
         this.on("input", function(msg, nodeSend, nodeDone) {
             var payload;	
 			this.token = n.token;
+			this.destination = parseInt(n.destination);
 			this.receiver = n.receiver;					
             if (this.serverConfig.wholemsg) {
                 var sess;
@@ -784,8 +814,16 @@ module.exports = function(RED) {
                     payload = msg.payload;
                 }
             }
-			payload = '{"AuthToken": "' + node.token + '", "Type": "chat","TypeID": "242B5A3B-C1AF-4663-BD97-E296E3DB4D2F", \
-			"ReceiverID": "' + node.receiver + '", "Body": "' + msg.payload + '", "Data":{}}'; 
+			payload = '{"AuthToken": "' + node.token + '", "Type": "chat","TypeID": "242B5A3B-C1AF-4663-BD97-E296E3DB4D2F",';						
+			if(this.destination == 0)
+			{
+				payload += 	' "ConversationID": "' + node.receiver + '",';
+			}
+			else if(this.destination == 1)
+			{
+				payload += 	' "ReceiverID": "' + node.receiver + '",';
+			} 
+			payload += 	'"Body": "' + msg.payload + '", "Data":{}}'; 
 			
             if (payload) {
                 if (msg._session && msg._session.type == "websocket") {
@@ -804,7 +842,7 @@ module.exports = function(RED) {
             node.status({});
         });
     }
-    RED.nodes.registerType("Date Picker",WebSocketDateNode);
+    RED.nodes.registerType("Receive Date",WebSocketDateNode);
 
     function WebSocketTimeNode(n) {
         RED.nodes.createNode(this,n);
@@ -845,6 +883,7 @@ module.exports = function(RED) {
         this.on("input", function(msg, nodeSend, nodeDone) {
             var payload;	
 			this.token = n.token;
+			this.destination = parseInt(n.destination);
 			this.receiver = n.receiver;					
             if (this.serverConfig.wholemsg) {
                 var sess;
@@ -861,8 +900,16 @@ module.exports = function(RED) {
                     payload = msg.payload;
                 }
             }
-			payload = '{"AuthToken": "' + node.token + '", "Type": "chat","TypeID": "F489C072-2C8B-4BC6-AD75-946D3CA721B7", \
-			"ReceiverID": "' + node.receiver + '", "Body": "' + msg.payload + '", "Data":{}}'; 
+			payload = '{"AuthToken": "' + node.token + '", "Type": "chat","TypeID": "F489C072-2C8B-4BC6-AD75-946D3CA721B7",';
+			if(this.destination == 0)
+			{
+				payload += 	' "ConversationID": "' + node.receiver + '",';
+			}
+			else if(this.destination == 1)
+			{
+				payload += 	' "ReceiverID": "' + node.receiver + '",';
+			}
+			payload += 	'"Body": "' + msg.payload + '", "Data":{}}'; 
 			
             if (payload) {
                 if (msg._session && msg._session.type == "websocket") {
@@ -881,9 +928,9 @@ module.exports = function(RED) {
             node.status({});
         });
     }
-    RED.nodes.registerType("Time Picker",WebSocketTimeNode);
+    RED.nodes.registerType("Receive Time",WebSocketTimeNode);
 
-    function WebSocketLocationNode(n) {
+    function WebSocketRecLocationNode(n) {
         RED.nodes.createNode(this,n);
         var node = this;
         this.server = (n.client)?n.client:n.server;
@@ -922,6 +969,7 @@ module.exports = function(RED) {
         this.on("input", function(msg, nodeSend, nodeDone) {
             var payload;	
 			this.token = n.token;
+			this.destination = parseInt(n.destination);
 			this.receiver = n.receiver;					
             if (this.serverConfig.wholemsg) {
                 var sess;
@@ -938,8 +986,17 @@ module.exports = function(RED) {
                     payload = msg.payload;
                 }
             }
-			payload = '{"AuthToken": "' + node.token + '", "Type": "chat","TypeID": "20A0CE4B-A236-4E96-9629-45A3AF5F62EA", \
-			"ReceiverID": "' + node.receiver + '", "Body": "' + msg.payload + '", "Data":{}}'; 
+			
+			payload = '{"AuthToken": "' + node.token + '", "Type": "chat","TypeID": "20A0CE4B-A236-4E96-9629-45A3AF5F62EA",';
+			if(this.destination == 0)
+			{
+				payload += 	' "ConversationID": "' + node.receiver + '",';
+			}
+			else if(this.destination == 1)
+			{
+				payload += 	' "ReceiverID": "' + node.receiver + '",';
+			}
+			payload += '"Body": "' + msg.payload + '", "Data":{}}'; 
 			
             if (payload) {
                 if (msg._session && msg._session.type == "websocket") {
@@ -958,7 +1015,7 @@ module.exports = function(RED) {
             node.status({});
         });
     }
-    RED.nodes.registerType("Location Picker",WebSocketLocationNode);
+    RED.nodes.registerType("Receive Location",WebSocketRecLocationNode);
 
     function WebSocketSendPhotoNode(n) {
         RED.nodes.createNode(this,n);
@@ -999,6 +1056,7 @@ module.exports = function(RED) {
         this.on("input", function(msg, nodeSend, nodeDone) {
             var payload;	
 			this.token = n.token;
+			this.destination = parseInt(n.destination);
 			this.receiver = n.receiver;				
             if (this.serverConfig.wholemsg) {
                 var sess;
@@ -1017,9 +1075,16 @@ module.exports = function(RED) {
             }
 			payload = ' {"AuthToken": "' + node.token + '",\
 				"Type": "chat",\
-				"TypeID": "969B986D-37C5-4E2E-BC59-944A3BC77CBC",\
-				"ReceiverID": "' + node.receiver + '",\
-			"Photos": [{"FileID": "1", "FileName": "v"}], \
+				"TypeID": "969B986D-37C5-4E2E-BC59-944A3BC77CBC",';
+			if(this.destination == 0)
+			{
+				payload += 	' "ConversationID": "' + node.receiver + '",';
+			}
+			else if(this.destination == 1)
+			{
+				payload += 	' "ReceiverID": "' + node.receiver + '",';
+			}
+			payload += 	' "Photos": [{"FileID": "1", "FileName": "v"}], \
 			"Body": "' + msg.payload + '" }'; 
 			
             if (payload) {

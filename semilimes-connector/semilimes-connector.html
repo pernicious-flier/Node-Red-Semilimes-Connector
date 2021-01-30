@@ -132,6 +132,7 @@
         defaults: {
             name: {value:"Send msg"},
             token: {value:"Token"},
+            destination: {value:"destination"},
             receiver: {value:"Receiver"},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
@@ -154,6 +155,7 @@
         defaults: {
             name: {value:"Option Select"},
             token: {value:"Token"},
+            destination: {value:"destination"},
             receiver: {value:"Receiver"},
             choice1: {value:"choise1"},
             choice2: {value:"choise2"},
@@ -182,6 +184,7 @@
         defaults: {
             name: {value:"Send Location"},
             token: {value:"Token"},
+            destination: {value:"destination"},
             receiver: {value:"Receiver"},
             latitude: {value:"latitude"},
             longitude: {value:"longitude"},
@@ -206,6 +209,7 @@
         defaults: {
             name: {value:"Send HTML"},
             token: {value:"Token"},
+            destination: {value:"destination"},
             receiver: {value:"Receiver"},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
@@ -223,11 +227,12 @@
         oneditprepare: ws_oneditprepare
     });
 	
-    RED.nodes.registerType('Date Picker',{
+    RED.nodes.registerType('Receive Date',{
         category: 'Semilimes',
         defaults: {
-            name: {value:"Date Picker"},
+            name: {value:"Receive Date"},
             token: {value:"Token"},
+            destination: {value:"destination"},
             receiver: {value:"Receiver"},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
@@ -245,11 +250,12 @@
         oneditprepare: ws_oneditprepare
     });
 	
-    RED.nodes.registerType('Time Picker',{
+    RED.nodes.registerType('Receive Time',{
         category: 'Semilimes',
         defaults: {
-            name: {value:"Time Picker"},
+            name: {value:"Receive Time"},
             token: {value:"Token"},
+            destination: {value:"destination"},
             receiver: {value:"Receiver"},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
@@ -267,11 +273,12 @@
         oneditprepare: ws_oneditprepare
     });
 	
-    RED.nodes.registerType('Location Picker',{
+    RED.nodes.registerType('Receive Location',{
         category: 'Semilimes',
         defaults: {
-            name: {value:"Location Picker"},
+            name: {value:"Receive Location"},
             token: {value:"Token"},
+            destination: {value:"destination"},
             receiver: {value:"Receiver"},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
@@ -294,6 +301,7 @@
         defaults: {
             name: {value:"Send Photo"},
             token: {value:"Token"},
+            destination: {value:"destination"},
             receiver: {value:"Receiver"},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
@@ -401,6 +409,13 @@
         <label for="node-input-receiver"><i class="fa fa-reply"></i><span> Send To</span></label>
         <input type="text" id="node-input-receiver" placeholder="Insert the destination id">
     </div>
+    <div class="form-row">
+        <label for="node-input-destination"><i class="fa fa-empire"></i> <span> Destination</span></label>
+        <select id="node-input-destination" style="width:125px !important">
+            <option value="0">Channel</option>
+            <option value="1">User</option>
+        </select>
+    </div>
     <div class="form-row" id="websocket-server-row">
         <label for="node-input-server"><i class="fa fa-bookmark"></i> Server URL<span data-i18n="websocket.label.path"></span></label>
         <input type="text" id="node-input-server">
@@ -420,6 +435,13 @@
 	<div class="form-row">
         <label for="node-input-receiver"><i class="fa fa-reply"></i><span> Send To</span></label>
         <input type="text" id="node-input-receiver" placeholder="Insert the destination id">
+    </div>
+    <div class="form-row">
+        <label for="node-input-destination"><i class="fa fa-empire"></i> <span> Destination</span></label>
+        <select id="node-input-destination" style="width:125px !important">
+            <option value="0">Channel</option>
+            <option value="1">User</option>
+        </select>
     </div>
 	<div class="form-row">
         <label for="node-input-choice1"><i class="fa fa-hand-o-right"></i><span> 1st choice</span></label>
@@ -465,6 +487,13 @@
         <label for="node-input-receiver"><i class="fa fa-reply"></i><span> Send To</span></label>
         <input type="text" id="node-input-receiver" placeholder="Insert the destination id">
     </div>
+    <div class="form-row">
+        <label for="node-input-destination"><i class="fa fa-empire"></i> <span> Destination</span></label>
+        <select id="node-input-destination" style="width:125px !important">
+            <option value="0">Channel</option>
+            <option value="1">User</option>
+        </select>
+    </div>
 	<div class="form-row">
         <label for="node-input-latitude"><i class="fa fa-reply"></i><span> Latitude</span></label>
         <input type="text" id="node-input-latitude" placeholder="Insert the Latitude">
@@ -493,14 +522,21 @@
         <label for="node-input-receiver"><i class="fa fa-reply"></i><span> Send To</span></label>
         <input type="text" id="node-input-receiver" placeholder="Insert the destination id">
     </div>
+    <div class="form-row">
+        <label for="node-input-destination"><i class="fa fa-empire"></i> <span> Destination</span></label>
+        <select id="node-input-destination" style="width:125px !important">
+            <option value="0">Channel</option>
+            <option value="1">User</option>
+        </select>
+    </div>
     <div class="form-row" id="websocket-server-row">
         <label for="node-input-server"><i class="fa fa-bookmark"></i> Server URL<span data-i18n="websocket.label.path"></span></label>
         <input type="text" id="node-input-server">
     </div>
 </script>
 
-<!-- semilimes Date Picker Node -->
-<script type="text/html" data-template-name="Date Picker">
+<!-- semilimes Receive Date Node -->
+<script type="text/html" data-template-name="Receive Date">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i><span> Name</span></label>
         <input type="text" id="node-input-name" placeholder="Insert the name of the node">
@@ -513,14 +549,21 @@
         <label for="node-input-receiver"><i class="fa fa-reply"></i><span> Send To</span></label>
         <input type="text" id="node-input-receiver" placeholder="Insert the destination id">
     </div>
+    <div class="form-row">
+        <label for="node-input-destination"><i class="fa fa-empire"></i> <span> Destination</span></label>
+        <select id="node-input-destination" style="width:125px !important">
+            <option value="0">Channel</option>
+            <option value="1">User</option>
+        </select>
+    </div>
     <div class="form-row" id="websocket-server-row">
         <label for="node-input-server"><i class="fa fa-bookmark"></i> Server URL<span data-i18n="websocket.label.path"></span></label>
         <input type="text" id="node-input-server">
     </div>
 </script>
 
-<!-- semilimes Time Picker Node -->
-<script type="text/html" data-template-name="Time Picker">
+<!-- semilimes Receive Time Node -->
+<script type="text/html" data-template-name="Receive Time">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i><span> Name</span></label>
         <input type="text" id="node-input-name" placeholder="Insert the name of the node">
@@ -532,6 +575,13 @@
 	<div class="form-row">
         <label for="node-input-receiver"><i class="fa fa-reply"></i><span> Send To</span></label>
         <input type="text" id="node-input-receiver" placeholder="Insert the destination id">
+    </div>
+    <div class="form-row">
+        <label for="node-input-destination"><i class="fa fa-empire"></i> <span> Destination</span></label>
+        <select id="node-input-destination" style="width:125px !important">
+            <option value="0">Channel</option>
+            <option value="1">User</option>
+        </select>
     </div>
     <div class="form-row" id="websocket-server-row">
         <label for="node-input-server"><i class="fa fa-bookmark"></i> Server URL<span data-i18n="websocket.label.path"></span></label>
@@ -540,7 +590,7 @@
 </script>
 
 <!-- semilimes Location Picker Node -->
-<script type="text/html" data-template-name="Location Picker">
+<script type="text/html" data-template-name="Receive Location">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i><span> Name</span></label>
         <input type="text" id="node-input-name" placeholder="Insert the name of the node">
@@ -552,6 +602,13 @@
 	<div class="form-row">
         <label for="node-input-receiver"><i class="fa fa-reply"></i><span> Send To</span></label>
         <input type="text" id="node-input-receiver" placeholder="Insert the destination id">
+    </div>
+    <div class="form-row">
+        <label for="node-input-destination"><i class="fa fa-empire"></i> <span> Destination</span></label>
+        <select id="node-input-destination" style="width:125px !important">
+            <option value="0">Channel</option>
+            <option value="1">User</option>
+        </select>
     </div>
     <div class="form-row" id="websocket-server-row">
         <label for="node-input-server"><i class="fa fa-bookmark"></i> Server URL<span data-i18n="websocket.label.path"></span></label>
@@ -573,6 +630,13 @@
 	<div class="form-row">
         <label for="node-input-receiver"><i class="fa fa-reply"></i><span> Send To</span></label>
         <input type="text" id="node-input-receiver" placeholder="Insert the destination id">
+    </div>
+    <div class="form-row">
+        <label for="node-input-destination"><i class="fa fa-empire"></i> <span> Destination</span></label>
+        <select id="node-input-destination" style="width:125px !important">
+            <option value="0">Channel</option>
+            <option value="1">User</option>
+        </select>
     </div>
     <div class="form-row" id="websocket-server-row">
         <label for="node-input-server"><i class="fa fa-bookmark"></i> Server URL<span data-i18n="websocket.label.path"></span></label>

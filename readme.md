@@ -1,8 +1,8 @@
-# Semilimes MESH connector nodes for Node-RED
-[![Platform](https://img.shields.io/badge/platform-Node--RED-red)](https://nodered.org)   [![License](https://img.shields.io/badge/license-Apache--License-lightgrey)](http://www.apache.org/licenses/LICENSE-2.0) [![Downloads](https://img.shields.io/badge/download-github-purple)](https://github.com/pernicious-flier/Node-Red-Semilimes-Connector) [![Install](https://img.shields.io/badge/Install-NPM-blue)](https://www.npmjs.com/package/node-red-semilimes-connector)
+# semilimes MESH connector nodes for Node-RED
+[![Platform](https://img.shields.io/badge/platform-Node--RED-red)](https://nodered.org)   [![License](https://img.shields.io/badge/license-Apache--License-lightgrey)](http://www.apache.org/licenses/LICENSE-2.0) [![Downloads](https://img.shields.io/badge/download-github-purple)](https://github.com/pernicious-flier/Node-Red-semilimes-Connector) [![Install](https://img.shields.io/badge/Install-NPM-blue)](https://www.npmjs.com/package/node-red-semilimes-connector)
 
-This package contains receiver, sender and few other nodes which act as connectors to a Semilimes channel
-The only thing required is the `token` and the `Channel ID` that can be retrieved by the Semilimes app.
+This package contains receiver, sender and few other nodes which act as connectors to a semilimes channel
+The only thing required is the `token` and the `Channel ID` that can be retrieved by the semilimes app.
 
 # Installation
 [![NPM](https://nodei.co/npm/node-red-semilimes-connector.png?downloads=true)](https://nodei.co/npm/node-red-semilimes-connector/)
@@ -14,19 +14,20 @@ Or run the following command in the root directory of your Node-RED installation
     npm install node-red-semilimes-connector --save
 
 # Installation of the mobile apps
-- IOS Semilimes Messenger : [![Platform](https://img.shields.io/badge/Apple%20IOS-Semilimes%20Messenger-blue.svg)](https://apps.apple.com/ch/app/semilimes-messenger/id1418041750?l=en)  
+- IOS semilimes Messenger : [![Platform](https://img.shields.io/badge/Apple%20IOS-semilimes%20Messenger-blue.svg)](https://apps.apple.com/ch/app/semilimes-messenger/id1418041750?l=en)  
 
-- Google Play Semilimes Messenger : [![Platform](https://img.shields.io/badge/Google--Play-Semilimes%20Messenger-darkgreen.svg)](https://play.google.com/store/apps/details?id=net.semilimes.messenger&hl=en&gl=US)  
+- Google Play semilimes Messenger : [![Platform](https://img.shields.io/badge/Google--Play-semilimes%20Messenger-darkgreen.svg)](https://play.google.com/store/apps/details?id=net.semilimes.messenger&hl=en&gl=US)  
 
 # Dependencies
 The nodes are tested with `Node.js v10.23.0` and `Node-RED v1.2.6`.
 # Usage
 ## Basics
-Every Semilimes node should be configured entering the *Token* and the *Channel ID* that can be retreived within the Semilimes mobile app. In order to enable the node to connect to Semilimes, the server URL has to be provided: wss://cloud.semilimes.net/CloudServer/wsclient 
+Every semilimes node should be configured entering the *Token* and the *Send To* ID that can be retreived within the semilimes mobile app. In order to enable the node to connect to semilimes, the server URL has to be provided: wss://cloud.semilimes.net/CloudServer/wsclient 
 <img src="images/listener_setup.png" title="Listener setup" width="600" />
 Other fields could be present depending on the selected node type. Those fields can be used and are overwritten if a JSON is passed to the input port.
+Node-Red can communicate directly with a user or send and receive messages from a channel. Channels can be created from the semilimes app and function as virtual users with their own ID. It is possible to create a channel dedicated to Node-Red, where all messages between users and machines will be published.
 
-### Types of Semilimes messages
+### Types of semilimes messages
 
 The following message contents can be sent and received 
 - **Send msg** - content is text
@@ -34,13 +35,13 @@ The following message contents can be sent and received
 - **Select** - content is a title followed by buttons to make a choice
 - **Send Location** - content is an object with latitude and longitude
 - **Send HTML** - content is an object that embed an HTML script
-- **Location Picker** - content is an object that enable the user to choose a location
-- **Date Picker** - content is an object that enable the user to choose a Date
-- **Time Picker** - content is an object that enable the user to choose a Time
-- **Send JSON** - content is a JSON and depends on the msg type (check the Semilimes API)
+- **Receive Location** - content is an object that enable the user to choose a location
+- **Receive Date** - content is an object that enable the user to choose a Date
+- **Receive Time** - content is an object that enable the user to choose a Time
+- **Send JSON** - content is a JSON and depends on the msg type (check the semilimes API)
 
 ### Receive msg - node
-The *Semilimes receive msg* node receives messages from the channel and outputs a JSON object. The content of the message depends on the message sent from the channel. 
+The *semilimes receive msg* node receives messages from the channel and outputs a JSON object. The content of the message depends on the message sent from the channel. 
 For a simple text message, the received payload contain the following fields:
 {
     “Type”: “chat”,
@@ -51,112 +52,119 @@ For a simple text message, the received payload contain the following fields:
 - ***type*** : The type of message received. Types see table below
 - ***Body*** : Received message content
 
-A simple flow to read the message caming from Semilimes channel and show it in the debug windows:
+A simple flow to read the message caming from semilimes channel and show it in the debug windows:
 <img src="images/receive_msg.png" title="receive message" width="600" />
 
 And this is how the ouput in the Debug windows looks like:
 <img src="images/receive_msg_debug.png" title="receive message debug" width="600" />
 
 ### Send msg - node
-The *Semilimes send msg* node send a text messages to a specified channel. TO be able to work it should be configured with the Token and the Receiver ID (the ID of the channel):
+The *semilimes send msg* node send a text messages to a specified channel. TO be able to work it should be configured with the Token and the Receiver ID (the ID of the channel):
 <img src="images/send_msg_config.png" title="send message setup" width="600" />
 
 - ***Name***: is the name of the node
-- ***Token***: is the Auth Token to be retreived from the Semilimes server
+- ***Token***: is the Auth Token to be retreived from the semilimes server
 - ***Send to***: is the channel ID
-- ***Server URL***: is the Semilimes server URL
+- ***Destination***: you have to choose whether to send the message to a user or to a channel
+- ***Server URL***: is the semilimes server URL
 
-Once the node is properly configured it can be used to send a simple text message. The string should be send to the input of the node, like the following example where the timestamps is sended as message.
+Once the node is properly configured it can be used to send a simple text message. The string should be send to the input of the node, like the following example where the timestamps is sent as message.
 <img src="images/send_msg_flow.png" title="send message flow" width="600" />
 
 ### Select - node
-The *Semilimes Select* node is used to send a choice to the selected channel in form of buttons. When the user press one button, a message is sent back to the Node-Red receive msg node, containing with ither information about the message also the choice made. 
+The *semilimes Select* node is used to send a choice to the selected channel in form of buttons. When the user press one button, a message is sent back to the Node-Red receive msg node, containing other information about the message and also the choice made. 
 The configuration windows of the node has some fields to be filled in order to work.
 <img src="images/select_config.png" title="select config" width="400" />
 
 - ***Name***: is the name of the node
-- ***Token***: is the Auth Token to be retreived from the Semilimes server
+- ***Token***: is the Auth Token to be retreived from the semilimes server
 - ***Send to***: is the channel ID
-- ***1 to 6 choise***: is the text to be embedded in the n button
-- ***Server URL***: is the Semilimes server URL
+- ***Destination***: you have to choose whether to send the message to a user or to a channel
+- ***1 to 6 choice***: is the text to be embedded in the n button
+- ***Server URL***: is the semilimes server URL
 
-The simplest way to use the select node is to fill the fields that you need and trigger it sending a string to the input. The input string will be the message text that will appear in the channel, over the choise buttons. It's not necessary to fill all the six choise, whether onlytwo choise are neededed just fill two choise field and send only two button.
+The simplest way to use the select node is to fill the fields that you need and trigger it sending a string to the input. The input string will be the message text that will appear in the channel, over the choice buttons. It's not necessary to fill all the six choices, whether only two choices are neededed just fill two choices field and send only two buttons.
 <img src="images/select_flow1.png" title="select flow 1" width="600" />
 
-To have more control on the node, it's also possible to feed it with a JSON object wich describe the functionality. In this case the choise fields in the configuration will be overwritten by the JSON. 
+To have more control on the node, it's also possible to feed it with a JSON object which describes the functionality. In this case the choice fields in the configuration will be overwritten by the JSON. 
 <img src="images/select_flow2.png" title="select flow 2" width="600" />
 <img src="images/select_flow2_JSON.png" title="select flow 2 JSON obj" width="600" />
 
 ### Send Location - node
-The *Semilimes Send Location* node is used to send a location to the selected channel, it will be displayed as a marker on a map. The configuration windows of the node has some fields to be filled in order to work.
-<img src="images/send_location_config.png" title="send loaction config" width="400" />
+The *semilimes Send Location* node is used to send a location to the selected channel, it will be displayed as a marker on a map. The configuration windows of the node has some fields to be filled in order to work.
+<img src="images/send_location_config.png" title="send location config" width="400" />
 
 - ***Name***: is the name of the node
-- ***Token***: is the Auth Token to be retreived from the Semilimes server
+- ***Token***: is the Auth Token to be retreived from the semilimes server
 - ***Send to***: is the channel ID
+- ***Destination***: you have to choose whether to send the message to a user or to a channel
 - ***Latitude***: is the latitude of the location
 - ***Longitude***: is the longitude of the location
-- ***Server URL***: is the Semilimes server URL
+- ***Server URL***: is the semilimes server URL
 
 The simplest way to use the send location node is to fill the fields that you need and trigger its input.
 <img src="images/send_location_flow1.png" title="send location flow 1" width="600" />
 
-To have more control on the node, it's also possible to feed it with a JSON object wich describe the functionality. In this case the choise fields in the configuration will be overwritten by the JSON. 
+To have more control on the node, it's also possible to feed it with a JSON object which describes the functionality. In this case the choice fields in the configuration will be overwritten by the JSON. 
 <img src="images/send_location_flow2.png" title="send location flow 2" width="600" />
 <img src="images/send_location_flow2_JSON.png" title="send location flow 2 JSON obj" width="400" />
 
 ### Send HTML - node
-The *Semilimes Send HTML* node is used to embed and send an HTML script within a message, the HTML will be rendered in the channel. The configuration windows of the node has some fields to be filled in order to work.
+The *semilimes Send HTML* node is used to embed and send an HTML script within a message, the HTML will be rendered in the channel. The configuration windows of the node has some fields to be filled in order to work.
 
 - ***Name***: is the name of the node
-- ***Token***: is the Auth Token to be retreived from the Semilimes server
+- ***Token***: is the Auth Token to be retreived from the semilimes server
 - ***Send to***: is the channel ID
-- ***Server URL***: is the Semilimes server URL
+- ***Destination***: you have to choose whether to send the message to a user or to a channel
+- ***Server URL***: is the semilimes server URL
 
-In order to use the node it is necessary to feed it with a JSON object wich describe the functionality.
+In order to use the node it is necessary to feed it with a JSON object which describes the functionality.
 <img src="images/send_HTML_flow.png" title="send HTML flow" width="600" />
 <img src="images/send_HTML_flow_JSON.png" title="send HTML flow JSON obj" width="400" />
 
-### Location Picker - node
-The *Semilimes Location Picker* node is meant to permit the user to choose a location on the map. Sending this message on a selected channel, a map will be shown and a user could pick a place on the map and send it back to Node-Red reveiver node. The configuration windows of the node has some fields to be filled in order to work.
+### Receive Location - node
+The *semilimes Receive Location* node is meant to permit the user to choose a location on the map. Sending this message on a selected channel, a map will be shown and a user could pick a place on the map and send it back to Node-Red receiver node. The configuration windows of the node has some fields to be filled in order to work.
 
 - ***Name***: is the name of the node
-- ***Token***: is the Auth Token to be retreived from the Semilimes server
+- ***Token***: is the Auth Token to be retreived from the semilimes server
 - ***Send to***: is the channel ID
-- ***Server URL***: is the Semilimes server URL
+- ***Destination***: you have to choose whether to send the message to a user or to a channel
+- ***Server URL***: is the semilimes server URL
 
-In order to use the node it is necessary to feed it with a string wich will be the text part of the message. 
+In order to use the node it is necessary to feed it with a string which will be the text part of the message. 
 <img src="images/location_picker_flow.png" title="location picker flow" width="600" />
 
-### Date Picker - node
-The *Semilimes Date Picker* node is meant to permit the user to choose a date. Sending this message on a selected channel, a calendar will be shown and a user could pick a date and send it back to Node-Red reveiver node. The configuration windows of the node has some fields to be filled in order to work.
+### Receive Date - node
+The *semilimes Receive Date* node is meant to permit the user to choose a date. Sending this message on a selected channel, a calendar will be shown and a user could pick a date and send it back to Node-Red receiver node. The configuration windows of the node has some fields to be filled in order to work.
 
 - ***Name***: is the name of the node
-- ***Token***: is the Auth Token to be retreived from the Semilimes server
+- ***Token***: is the Auth Token to be retreived from the semilimes server
 - ***Send to***: is the channel ID
-- ***Server URL***: is the Semilimes server URL
+- ***Destination***: you have to choose whether to send the message to a user or to a channel
+- ***Server URL***: is the semilimes server URL
 
-In order to use the node it is necessary to feed it with a string wich will be the text part of the message. 
+In order to use the node it is necessary to feed it with a string which will be the text part of the message. 
 <img src="images/date_picker_flow.png" title="date picker flow" width="600" />
 
-### Time Picker - node
-The *Semilimes Time Picker* node is meant to permit the user to choose a time. Sending this message on a selected channel, a clock will be shown and a user could pick a time and send it back to Node-Red reveiver node. The configuration windows of the node has some fields to be filled in order to work.
+### Receive Time - node
+The *semilimes Time Picker* node is meant to permit the user to choose a time. Sending this message on a selected channel, a clock will be shown and a user could pick a time and send it back to Node-Red receiver node. The configuration windows of the node has some fields to be filled in order to work.
 
 - ***Name***: is the name of the node
-- ***Token***: is the Auth Token to be retreived from the Semilimes server
+- ***Token***: is the Auth Token to be retreived from the semilimes server
 - ***Send to***: is the channel ID
-- ***Server URL***: is the Semilimes server URL
+- ***Destination***: you have to choose whether to send the message to a user or to a channel
+- ***Server URL***: is the semilimes server URL
 
-In order to use the node it is necessary to feed it with a string wich will be the text part of the message. 
+In order to use the node it is necessary to feed it with a string which will be the text part of the message. 
 <img src="images/time_picker_flow.png" title="time picker flow" width="600" />
 
 ### Send JSON - node
-The *Semilimes Send JSON* node is ment to be used to connect to the server sending the whole JSON message. To use this node you have to check the Semilimes API for the sintax and the message type that could be sent.The configuration windows of the node has only two fields to be filled in order to work.
+The *semilimes Send JSON* node is ment to be used to connect to the server sending the whole JSON message. To use this node you have to check the semilimes API for the syntax and the message type that could be sent.The configuration windows of the node has only two fields to be filled in order to work.
 
 - ***Name***: is the name of the node
-- ***Server URL***: is the Semilimes server URL
+- ***Server URL***: is the semilimes server URL
 
-This node could be used to send any kind of message supported by the API, the following is an example flow wich send an HTML script embedded int the message. 
+This node could be used to send any kind of message supported by the API, the following is an example flow which sends an HTML script embedded into the message. 
 <img src="images/send_json_flow.png" title="send json flow" width="600" />
 <img src="images/send_json_JSON.png" title="send json JSON script" width="400" />
 
@@ -199,7 +207,7 @@ TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
 
 6. Trademarks. This License does not grant permission to use the trade names, trademarks, service marks, or product names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the NOTICE file.
 
-7. Disclaimer of Warranty. Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.
+7. Disclaimer of Warranty. Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, eother express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.
 
 8. Limitation of Liability. In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall any Contributor be liable to You for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this License or out of the use or inability to use the Work (including but not limited to damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses), even if such Contributor has been advised of the possibility of such damages.
 

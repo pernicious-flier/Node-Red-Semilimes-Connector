@@ -1,15 +1,19 @@
 {
 	"name": "node-red-semilimes-connector",
-	"version": "1.0.10",
+	"version": "1.0.2",
 	"description": "A websocket connector to Semilimes",
 	"author": "Flavio Ansovini",
 	"license": "Apache",
-	"keywords": [ "node-red","Semilimes","connector"],
-    "repository" : {
-        "type" : "git",
-        "url" : "https://github.com/pernicious-flier/Node-Red-Semilimes-Connector"
-    },
-	"node-red" : {
+	"keywords": [
+		"node-red",
+		"Semilimes",
+		"connector"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/pernicious-flier/Node-Red-Semilimes-Connector"
+	},
+	"node-red": {
 		"nodes": {
 			"semilimes-connector": "semilimes-connector/semilimes-connector.js"
 		}
