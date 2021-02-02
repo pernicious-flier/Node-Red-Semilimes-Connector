@@ -1,6 +1,6 @@
 {
 	"name": "node-red-semilimes-connector",
-	"version": "1.0.22",
+	"version": "1.0.23",
 	"description": "A websocket connector to semilimes",
 	"author": "Flavio Ansovini",
 	"license": "Apache",

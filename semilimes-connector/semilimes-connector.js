@@ -220,7 +220,7 @@ module.exports = function(RED) {
 		try {
 			for (var i = 0; i < this._inputNodes.length; i++) 
 			{
-				if(obj.ConversationID == this._inputNodes[i].rxfilter)
+				if(obj.ConversationID == this._inputNodes[i].rxfilter || this._inputNodes[i].rxfilter == "")
 				{
 					this._inputNodes[i].send(msg);
 				}
