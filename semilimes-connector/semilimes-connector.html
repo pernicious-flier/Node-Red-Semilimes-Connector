@@ -19,6 +19,10 @@
         <label for="node-input-name"><i class="fa fa-tag"></i><span"> Name</span></label>
         <input type="text" id="node-input-name" placeholder="Insert the name of the node">
     </div>
+	<div class="form-row">
+        <label for="node-input-rxfilter"><i class="fa fa-filter"></i><span> Source Filter</span></label>
+        <input type="text" id="node-input-rxfilter" placeholder="Insert the ChannelId or UserId">
+    </div>
     <div class="form-row" id="websocket-server-row">
         <label for="node-input-server"><i class="fa fa-bookmark"></i> Server URL<span data-i18n="websocket.label.path"></span></label>
         <input type="text" id="node-input-server">
@@ -29,6 +33,11 @@
 
 (function() {
 
+
+    function sl_label() {
+        return this.name||this.default.name;
+    }
+	
     function ws_oneditprepare() {
         $("#websocket-client-row").hide();
         $("#node-input-mode").on("change", function() {
@@ -86,218 +95,219 @@
     }
 
     RED.nodes.registerType('Receive msg',{
-        category: 'Semilimes',
+        category: 'semilimes',
         defaults: {
             name: {value:"Receive msg"},
+            rxfilter: {value:""},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
         },
         color:"rgb(136, 158, 171)",
         inputs:0,
         outputs:1,
-        icon: "Semilimes_icon.svg",
+        icon: "semilimes_icon.svg",
         labelStyle: function() {
             return this.name?"node_label_italic":"";
         },
-        label: ws_label,
+        label: sl_label,
         oneditsave: ws_oneditsave,
         oneditprepare: ws_oneditprepare
     });
 
     RED.nodes.registerType('Send JSON',{
-        category: 'Semilimes',
+        category: 'semilimes',
         defaults: {
             name: {value:"Send JSON"},
-            token: {value:"Token"},
-            receiver: {value:"Receiver"},
+            token: {value:""},
+            receiver: {value:""},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
         },
         color:"rgb(136, 158, 171)",
         inputs:1,
         outputs:0,
-        icon: "Semilimes_icon.svg",
+        icon: "semilimes_icon.svg",
         align: "right",
         labelStyle: function() {
             return this.name?"node_label_italic":"";
         },
-        label: ws_label,
+        label: sl_label,
         oneditsave: ws_oneditsave,
         oneditprepare: ws_oneditprepare
     });
 
 
     RED.nodes.registerType('Send msg',{
-        category: 'Semilimes',
+        category: 'semilimes',
         defaults: {
             name: {value:"Send msg"},
-            token: {value:"Token"},
-            destination: {value:"destination"},
-            receiver: {value:"Receiver"},
+            token: {value:""},
+            destination: {value:"0"},
+            receiver: {value:""},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
         },
         color:"rgb(136, 158, 171)",
         inputs:1,
         outputs:0,
-        icon: "Semilimes_icon.svg",
+        icon: "semilimes_icon.svg",
         align: "right",
         labelStyle: function() {
             return this.name?"node_label_italic":"";
         },
-        label: ws_label,
+        label: sl_label,
         oneditsave: ws_oneditsave,
         oneditprepare: ws_oneditprepare
     });
 
     RED.nodes.registerType('Select',{
-        category: 'Semilimes',
+        category: 'semilimes',
         defaults: {
-            name: {value:"Option Select"},
-            token: {value:"Token"},
-            destination: {value:"destination"},
-            receiver: {value:"Receiver"},
-            choice1: {value:"choise1"},
-            choice2: {value:"choise2"},
-            choice3: {value:"choise3"},
-            choice4: {value:"choise4"},
-            choice5: {value:"choise5"},
-            choice6: {value:"choise6"},
+            name: {value:"Select"},
+            token: {value:""},
+            destination: {value:"0"},
+            receiver: {value:""},
+            choice1: {value:""},
+            choice2: {value:""},
+            choice3: {value:""},
+            choice4: {value:""},
+            choice5: {value:""},
+            choice6: {value:""},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
         },
         color:"rgb(136, 158, 171)",
         inputs:1,
         outputs:0,
-        icon: "Semilimes_icon.svg",
+        icon: "semilimes_icon.svg",
         align: "right",
         labelStyle: function() {
             return this.name?"node_label_italic":"";
         },
-        label: ws_label,
+        label: sl_label,
         oneditsave: ws_oneditsave,
         oneditprepare: ws_oneditprepare
     });
 	
     RED.nodes.registerType('Send Location',{
-        category: 'Semilimes',
+        category: 'semilimes',
         defaults: {
             name: {value:"Send Location"},
-            token: {value:"Token"},
-            destination: {value:"destination"},
-            receiver: {value:"Receiver"},
-            latitude: {value:"latitude"},
-            longitude: {value:"longitude"},
+            token: {value:""},
+            destination: {value:"0"},
+            receiver: {value:""},
+            latitude: {value:""},
+            longitude: {value:""},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
         },
         color:"rgb(136, 158, 171)",
         inputs:1,
         outputs:0,
-        icon: "Semilimes_icon.svg",
+        icon: "semilimes_icon.svg",
         align: "right",
         labelStyle: function() {
             return this.name?"node_label_italic":"";
         },
-        label: ws_label,
+        label: sl_label,
         oneditsave: ws_oneditsave,
         oneditprepare: ws_oneditprepare
     });
 	
     RED.nodes.registerType('Send HTML',{
-        category: 'Semilimes',
+        category: 'semilimes',
         defaults: {
             name: {value:"Send HTML"},
-            token: {value:"Token"},
-            destination: {value:"destination"},
-            receiver: {value:"Receiver"},
+            token: {value:""},
+            destination: {value:"0"},
+            receiver: {value:""},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
         },
         color:"rgb(136, 158, 171)",
         inputs:1,
         outputs:0,
-        icon: "Semilimes_icon.svg",
+        icon: "semilimes_icon.svg",
         align: "right",
         labelStyle: function() {
             return this.name?"node_label_italic":"";
         },
-        label: ws_label,
+        label: sl_label,
         oneditsave: ws_oneditsave,
         oneditprepare: ws_oneditprepare
     });
 	
     RED.nodes.registerType('Receive Date',{
-        category: 'Semilimes',
+        category: 'semilimes',
         defaults: {
             name: {value:"Receive Date"},
-            token: {value:"Token"},
-            destination: {value:"destination"},
-            receiver: {value:"Receiver"},
+            token: {value:""},
+            destination: {value:"0"},
+            receiver: {value:""},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
         },
         color:"rgb(136, 158, 171)",
         inputs:1,
         outputs:0,
-        icon: "Semilimes_icon.svg",
+        icon: "semilimes_icon.svg",
         align: "right",
         labelStyle: function() {
             return this.name?"node_label_italic":"";
         },
-        label: ws_label,
+        label: sl_label,
         oneditsave: ws_oneditsave,
         oneditprepare: ws_oneditprepare
     });
 	
     RED.nodes.registerType('Receive Time',{
-        category: 'Semilimes',
+        category: 'semilimes',
         defaults: {
             name: {value:"Receive Time"},
-            token: {value:"Token"},
-            destination: {value:"destination"},
-            receiver: {value:"Receiver"},
+            token: {value:""},
+            destination: {value:"0"},
+            receiver: {value:""},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
         },
         color:"rgb(136, 158, 171)",
         inputs:1,
         outputs:0,
-        icon: "Semilimes_icon.svg",
+        icon: "semilimes_icon.svg",
         align: "right",
         labelStyle: function() {
             return this.name?"node_label_italic":"";
         },
-        label: ws_label,
+        label: sl_label,
         oneditsave: ws_oneditsave,
         oneditprepare: ws_oneditprepare
     });
 	
     RED.nodes.registerType('Receive Location',{
-        category: 'Semilimes',
+        category: 'semilimes',
         defaults: {
             name: {value:"Receive Location"},
-            token: {value:"Token"},
-            destination: {value:"destination"},
-            receiver: {value:"Receiver"},
+            token: {value:""},
+            destination: {value:"0"},
+            receiver: {value:""},
             server: {type:"semilimes-listener", validate: ws_validateserver},
             client: {type:"semilimes-client", validate: ws_validateclient}
         },
         color:"rgb(136, 158, 171)",
         inputs:1,
         outputs:0,
-        icon: "Semilimes_icon.svg",
+        icon: "semilimes_icon.svg",
         align: "right",
         labelStyle: function() {
             return this.name?"node_label_italic":"";
         },
-        label: ws_label,
+        label: sl_label,
         oneditsave: ws_oneditsave,
         oneditprepare: ws_oneditprepare
     });
 /*	
     RED.nodes.registerType('Send Photo',{
-        category: 'Semilimes',
+        category: 'semilimes',
         defaults: {
             name: {value:"Send Photo"},
             token: {value:"Token"},
@@ -309,7 +319,7 @@
         color:"rgb(136, 158, 171)",
         inputs:1,
         outputs:0,
-        icon: "Semilimes_icon.svg",
+        icon: "semilimes_icon.svg",
         align: "right",
         labelStyle: function() {
             return this.name?"node_label_italic":"";

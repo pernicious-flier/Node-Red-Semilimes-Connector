@@ -43,6 +43,8 @@ module.exports = function(RED) {
         // Create a RED node
         RED.nodes.createNode(this,n);
         var node = this;
+		
+		//node.receiver = "aa4eccdf-7868-4e0f-92f6-5a90a4e251b0";		
 
         // Store local copies of the node configuration (as defined in the .html)
         node.path = n.path;
@@ -197,7 +199,7 @@ module.exports = function(RED) {
     }
 
     WebSocketListenerNode.prototype.handleEvent = function(id,/*socket*/socket,/*String*/event,/*Object*/data,/*Object*/flags) {
-        var msg;
+        var msg,obj;
         if (this.wholemsg) {
             try {
                 msg = JSON.parse(data);
@@ -214,12 +216,19 @@ module.exports = function(RED) {
             };
         }
         msg._session = {type:"websocket",id:id};
-        for (var i = 0; i < this._inputNodes.length; i++) {
-            this._inputNodes[i].send(msg);
-        }
+		obj = JSON.parse(msg.payload);
+		try {
+			for (var i = 0; i < this._inputNodes.length; i++) 
+			{
+				if(obj.ConversationID == this._inputNodes[i].rxfilter)
+				{
+					this._inputNodes[i].send(msg);
+				}
+			}
+		}
+		catch(err) {}
     }
-
-    WebSocketListenerNode.prototype.broadcast = function(data) {
+	WebSocketListenerNode.prototype.broadcast = function(data) {
         if (this.isServer) {
             for (let client in this._clients) {
                 if (this._clients.hasOwnProperty(client)) {
@@ -255,6 +264,7 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,n);
         this.server = (n.client)?n.client:n.server;
         var node = this;
+		this.rxfilter = n.rxfilter;
         this.serverConfig = RED.nodes.getNode(this.server);
         if (this.serverConfig) {
             this.serverConfig.registerInputNode(this);

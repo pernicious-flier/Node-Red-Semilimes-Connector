@@ -1,3 +1,4 @@
+
 # semilimes MESH connector nodes for Node-RED
 [![Platform](https://img.shields.io/badge/platform-Node--RED-red)](https://nodered.org)   [![License](https://img.shields.io/badge/license-Apache--License-lightgrey)](http://www.apache.org/licenses/LICENSE-2.0) [![Downloads](https://img.shields.io/badge/download-github-purple)](https://github.com/pernicious-flier/Node-Red-semilimes-Connector) [![Install](https://img.shields.io/badge/Install-NPM-blue)](https://www.npmjs.com/package/node-red-semilimes-connector)
 
@@ -42,6 +43,11 @@ The following message contents can be sent and received
 
 ### Receive msg - node
 The *semilimes receive msg* node receives messages from the channel and outputs a JSON object. The content of the message depends on the message sent from the channel. 
+
+- ***Name***: is the name of the node
+- ***Source Filter***: Filters messages returning only those coming from the indicated UserID or ChannelID. If this field is left blank, you will receive messages from all your contacts and the channels you are subscribed to.
+- ***Server URL***: is the semilimes server URL
+
 For a simple text message, the received payload contain the following fields:
 {
     “Type”: “chat”,

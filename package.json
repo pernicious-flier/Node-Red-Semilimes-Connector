@@ -1,12 +1,12 @@
 {
 	"name": "node-red-semilimes-connector",
-	"version": "1.0.2",
-	"description": "A websocket connector to Semilimes",
+	"version": "1.0.22",
+	"description": "A websocket connector to semilimes",
 	"author": "Flavio Ansovini",
 	"license": "Apache",
 	"keywords": [
 		"node-red",
-		"Semilimes",
+		"semilimes",
 		"connector"
 	],
 	"repository": {
